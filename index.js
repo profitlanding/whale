@@ -54,6 +54,9 @@ function createMainWindow() {
       plugins: true
     }
   });
+  
+  // Uncomment for debag
+  // win.webContents.openDevTools();
 
   if (process.platform === 'darwin') {
     win.setSheetOffset(40);
@@ -102,6 +105,15 @@ app.on('ready', () => {
     mainWindow.show();
   });
 
+  // ===========
+  // Load JS Extentions for Trello
+  // ===========
+  page.on('did-finish-load', function() {
+    let script = fs.readFileSync(`${__dirname}/extentions.js`, 'utf8');
+    page.executeJavaScript(script);
+  });
+  // ===========
+ 
   page.on('new-window', (e, url) => {
     e.preventDefault();
     electron.shell.openExternal(url);
