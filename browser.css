@@ -2,3 +2,78 @@
   padding-left: 80px !important;
   -webkit-app-region: drag;
 }
+
+.header {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+/* 
+.header-boards-button {
+  margin-left: 70px;
+}
+*/
+
+/* Trello Clean */
+.js-add-list.list-wrapper.mod-add.is-idle {
+  display: none;
+}
+
+/* Trello No Strikethrough  */
+.checklist-item-state-complete .checklist-item-details-text {
+  text-decoration: initial !important;
+}
+
+/* Card Counter */
+.cardCounter {
+    font-size: 13px;
+    letter-spacing: 0px;
+    background: #E09952;
+    color: #FFF;
+    padding: 4px;
+  display: inline-block;
+  height: 100%;
+  padding: 4px;
+  margin-right: 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: 0px 2px;
+    float: left;
+    cursor: pointer;
+}
+
+.cardCounter.limitReached {
+    background: #BD2828;
+}
+
+.total-cards {
+    color: #FFF;
+    padding: 0 8px 0 8px !important;
+    background: rgba(0,0,0,.12);
+    border: 1px #FFF solid;
+    box-sizing: border-box;
+}
+
+.donate-wrapper {
+    background: rgba(0,0,0,.12);
+    padding: 0 4px 0 4px !important;
+    height: 30px;
+  display: inline-block;
+  line-height: 30px;
+  font-weight: bold;
+
+}
+
+.donate-wrapper a {
+    color: #FFF;
+    text-decoration: none !important;
+}
+
+.donate-wrapper:hover {
+    background: rgba(0,0,0,.3);
+}
+
+.donate-wrapper:hover a {
+    color: #DDD;
+}
