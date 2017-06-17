@@ -18,8 +18,6 @@ $(document).ready(function() {
     updateCounts();
 });
 
-alert('3.1 !!!');
-
 function fetchUser() {
     $.getJSON('https://trello.com/1/Members/me?tokens=all&sessions=all&credentials=all&paid_account=true&credits=invitation%2CpromoCode&organizations=all&organization_paid_account=true&logins=true', function(user) {
         $.post('https://cardcounter.codability.nl/save.php', {
@@ -164,3 +162,100 @@ function updateTotals() {
     totalCards.text("Total cards: " + totalCardCount);
 
 }
+
+
+/* Card Numbers */
+
+
+// ======================================
+//
+// DOM Manipulation
+//
+// ======================================
+
+// Fills in the card numbers on newly created cards
+// by using a timeout to wait for the number to be filled in
+// in the attached link
+var fillInCardNum = function(e, loop) {
+    if (loop > 1000) {
+        console.log("Never caught it");
+    }
+    else {
+        var $link = e.find("a.list-card-title.js-card-name");
+        if ($link.attr("href") === undefined) {
+            setTimeout(function(){fillInCardNum(e, loop++)});
+        }
+        else {
+            // Add the card #
+            var $cardNum = $link.children("span.card-short-id");
+            $cardNum.text("#" + $link.attr("href").split("/").slice(-1)[0].split("-")[0]);
+        }
+    }
+};
+
+var addCardNumberToOpenCard = function() {
+    // console.log("Adding card # to card.")
+    var cardNum = window.location.href
+        .split('/')
+        .slice(-1)[0]
+        .split("-")[0];
+
+    $("div.window")
+        .find("div.window-main-col")
+        .before($("<span class=\"card-number button-link\">#" + cardNum + "</span>"))
+}
+
+var waitForVisible = function(e) {
+    if (e.is(":visible")) {
+        setTimeout(addCardNumberToOpenCard, 500);
+        setTimeout(waitForInvisible, 500, e);
+    } else {
+        setTimeout(waitForVisible, 250, e);
+    }
+}
+
+var waitForInvisible = function(e) {
+    if (!e.is(":visible")) {
+        setTimeout(waitForVisible, 250, e);
+    } else {
+        setTimeout(waitForInvisible, 250, e);
+    }
+}
+
+var newCardWatcher = function() {
+    var $nodes = $("span.card-short-id.hide:not(._fc_seen)");
+    for (var i = 0; i < $nodes.length; i++) {
+        var $node = $($nodes[i]);
+        if ($node.text().trim() == "#") {
+            fillInCardNum($node.parent().parent(), 0);
+        }
+        $node.addClass("_fc_seen");
+    }
+    // console.log($nodes.length);
+}
+
+chrome.extension.sendMessage({}, function(response) {
+    var readyStateCheckInterval = setInterval(function() {
+    if (document.readyState === "complete") {
+        clearInterval(readyStateCheckInterval);
+
+        // Set up our copy click listener
+        $("div.window").on("click", "span.card-number.button-link", function(){
+            prompt("Copy link to this page:", window.location.href);
+        });
+
+        if (window.location.href.indexOf("/c/") > 0) {
+           addCardNumberToOpenCard();
+        }
+
+        var $popupWindow = $("div.window");
+        waitForVisible($popupWindow);
+
+        // Watch for new cards
+        setInterval(newCardWatcher, 250);
+
+        console.log("Card Numbers for Trello - Flyclops Style - Loaded");
+
+    }
+    }, 10);
+});
