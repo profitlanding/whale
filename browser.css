@@ -77,3 +77,28 @@
 .donate-wrapper:hover a {
     color: #DDD;
 }
+
+/* Trello Card Numbers */
+
+/* Card Numbers */
+
+.list-card-title .card-short-id {
+    display: block !important;
+    font-weight: bold;
+}
+
+span.card-number {
+    margin-left: 50px;
+    display: inline-block;
+    width: 75px;
+    text-align: center;
+}
+
+/* Extra details */
+.hide-extra-actions .phenom-other {
+    display: inherit !important;
+}
+
+a.js-show-extra-actions {
+    display: none !important;
+}
